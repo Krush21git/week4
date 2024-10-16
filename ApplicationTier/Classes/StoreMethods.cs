@@ -39,7 +39,7 @@ namespace ApplicationTier.Classes
             var context = new IndustryConnectWeek2Context();
 
             var store = await context.Stores.Include(s => s.Sales)
-                .ThenInclude(p => p.Product).FirstOrDefaultAsync(s => s.Id == StoreId);
+                .ThenInclude(p => p.Product).FirstOrDefaultAsync(s => s.StoreId== StoreId);
 
 
             return Mapper(store);
@@ -53,7 +53,7 @@ namespace ApplicationTier.Classes
                 var storeDto = new StoreDto
                 {
                     Name = store.Name,
-                    Id = store.Id,
+                    Id = store.StoreId,
                     TotalSale = store.Sales?.Sum(p => p.Product.Price)
                 };
 

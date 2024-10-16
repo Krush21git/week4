@@ -14,9 +14,6 @@ builder.Services.AddScoped<ICustomerMethods, CustomerMethods>();
 
 var app = builder.Build();
 
-
-
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

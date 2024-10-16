@@ -34,6 +34,7 @@ namespace ApplicationTier.Classes
        
         }
 
+
         public async Task<CustomerDto> GetCustomer(int CustomerId)
         {
             var context = new IndustryConnectWeek2Context();
@@ -43,6 +44,38 @@ namespace ApplicationTier.Classes
             return Mapper(customer);
         }
 
+        public async Task<bool> RemoveCustomer(int cId)
+        {
+            var context = new IndustryConnectWeek2Context();
+
+            // Retrieve the customer by Id
+            //var customerToDelete = await context.Customers.FindAsync(cId);
+            var customerToDelete = await context.Customers
+                                     .Include(c => c.Sales) // Include related sales
+                                     .FirstOrDefaultAsync(c => c.Id == cId);
+
+            if (customerToDelete == null)
+            {
+                Console.WriteLine("false");
+                return false; // Customer not found
+            }
+            else
+            {
+                Console.WriteLine("Customer found, removing...");
+            }
+
+            context.Sales.RemoveRange(customerToDelete.Sales);
+
+            // Remove the customer
+            context.Customers.Remove(customerToDelete);
+
+            // Save the changes to the database
+            await context.SaveChangesAsync();
+
+            Console.WriteLine("Customer successfully removed.");
+
+            return true; // Customer successfully removed
+        }
 
         private static CustomerDto Mapper(Customer? customer)
         {
