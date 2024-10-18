@@ -1,6 +1,7 @@
 ﻿using ApplicationTier.Classes;
 using ApplicationTier.Interfaces;
 using Azure.Identity;
+using IndustryConnect_Week_Microservices.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,6 +27,16 @@ namespace CustomerApi.Controllers
 
             return new JsonResult(customer); 
         }
+
+        [HttpDelete(Name = "RemoveCustomer")]
+        public async Task<JsonResult> RemoveCustomer(int cId)
+        {
+            var result = await _customerMethods.RemoveCustomer(cId);
+            Console.WriteLine("deleted successfully");
+            return new JsonResult(result); // Return 404 if the customer is not found
+        }
+
+
 
 
     }
